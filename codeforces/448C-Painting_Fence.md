@@ -1,4 +1,4 @@
-## 448C - Painting Fenc
+## 448C - Painting Fence
 ### Explicación
 
 Según como nos explican, lo ideal es siempre que la cantidad de pintadas horizontales debe ser lo más grande posible, por lo que primero sabemos que la cantidad minima de strokes sería el minimo entre todas las alturas. Y también la cantidad máxima de stroke en un segmento [l, r], sería r - l + 1 puesto que sería pintar cada plank verticalmente.
