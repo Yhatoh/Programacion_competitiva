@@ -7,7 +7,7 @@ cpp:
 
 cpp-i:
 	g++ $(dir)/$(f).cpp -o out
-	./out
+	./out < input
 
 java:
 	javac $(dir)/$(f).java
