@@ -1,85 +1,100 @@
-#include<bits/stdc++.h>
+/*
+Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de mi vida los consagré exclusivamente al altruismo y al efecto hice mi primer testamento en 1894, legando a la sociedad de Valparaíso una Universidad, pero en el transcurso del tiempo, la experiencia me demostró que aquello era un error y que era de importancia capital levantar al proletario de mi patria, concibiendo un plan, por el cual contribuyo, primeramente con mi óbolo a la infancia, enseguida a la Escuela Primaria, de ella a la Escuela de Artes y Oficios y por último al Colegio de Ingenieros, poniendo al alcance del desvalido meritorio llegar al más alto grado del saber humano.
+*/
+ 
+#include <bits/stdc++.h>
 using namespace std;
+ 
+#define DBG(var) cout << #var << " = " << var << "\n";
+#define fn(i,n) for(int i = 0; i < n; i++)
+#define flr(i,l,r) for(int i = l; i < r; i++)
+#define flre(i,l,r) for(int i = l; i <= r; i++)
+#define frl(i,l,r) for(int i = r; i > l; i--)
+#define frle(i,l,r) for(int i = r; i >= l; i--)
+#define sortv(vec) sort(vec.begin(), vec.end())
 
-typedef vector< int > vi;
-typedef vector< vi > vvi;
+typedef long long ll;
 
-vvi graph;
-int n, m;
-
-void dfs(int i, int j, int w){
-  int i_1j, i1j, ij_1, ij1; 
-  i_1j = i1j = ij_1 = ij1 = 0;
-  if(i > 0 && graph[i - 1][j] > w + 1) graph[i - 1][j] = w + 1, i_1j = 1;
-  if(j > 0 && graph[i][j - 1] > w + 1) graph[i][j - 1] = w + 1, ij_1 = 1;
-  if(i < n - 1 && graph[i + 1][j] > w + 1) graph[i + 1][j] = w + 1, i1j = 1;
-  if(j < m - 1 && graph[i][j + 1] > w + 1) graph[i][j + 1] = w + 1, ij1 = 1;
-
-  if(i_1j) dfs(i - 1, j, w + 1);
-  if(ij_1) dfs(i, j - 1, w + 1);
-  if(i1j) dfs(i + 1, j, w + 1);
-  if(ij1) dfs(i, j + 1, w + 1);
-}
-
-int main(){
-  int start_i, start_j, end_i, end_j;
+int main() {
+  ios_base::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.setf(ios::fixed);
+  cout.precision(4);
+  int n, m;
   cin >> n >> m;
-  for(int i = 0; i < n; i++){
-    vi row(m);
-    for(int j = 0; j < m; j++){
-      char c;
-      cin >> c;
-      row[j] = (c == '#' ? -2 : 1000000);
-      if(c == 'A'){
-        start_i = i;
-        start_j = j;
-        row[j] = 0;
-      } else if(c == 'B'){
-        end_i = i;
-        end_j = j;
+
+  vector< string > v(n);
+  pair< int, int > s;
+  pair< int, int > f;
+  fn(i, n) {
+    cin >> v[i]; 
+    fn(j, m) {
+      if(v[i][j] == 'A') {
+        s.first = i; s.second = j;
+      } else if(v[i][j] == 'B') {
+        f.first = i; f.second = j;
       }
     }
-    graph.push_back(row);
   }
 
-  dfs(start_i, start_j, 0);
-  
-  /*
-  for(int i = 0; i < n; i++){
-    for(int j = 0; j < m; j++){
-      cout << graph[i][j] << " ";
-    }cout << "\n";
-  }cout << "\n";
-  */
-  if(graph[end_i][end_j] == 1000000) cout << "NO\n";
-  else {
-    cout << "YES\n";
-    cout << graph[end_i][end_j] << "\n";
-    string s = "";
-    for(int i = end_i, j = end_j; i != start_i || j != start_j;){
-      //cout << i << " " << j << "\n";
-      if(i > 0 && graph[i - 1][j] == graph[i][j] - 1){
-        i = i - 1;
-        s = "D" + s;
-        continue;
-      }
-      if(j > 0 && graph[i][j - 1] == graph[i][j] - 1){
-        j = j - 1;
-        s = "R" + s;
-        continue;
-      }
-      if(i < n - 1 && graph[i + 1][j] == graph[i][j] - 1){
-        i = i + 1;
-        s = "U" + s;
-        continue;
-      }
-      if(j < m - 1 && graph[i][j + 1] == graph[i][j] - 1){
-        j = j + 1;
-        s = "L" + s;
-        continue;
-      }
+  queue< pair< int, int > > q;
+  vector< vector< int > > d(n, vector< int >(m, 1000000000));
+  vector< vector< pair< int, int > > > p(n, vector< pair< int, int > >(m));
+  q.push(s);
+  d[s.first][s.second] = 0;
+  while(!q.empty()) {
+    int i = q.front().first;
+    int j = q.front().second;
+    q.pop();
+    if(i > 0 && v[i - 1][j] != '#' && d[i - 1][j] > d[i][j] + 1) {
+      d[i - 1][j] = d[i][j] + 1;
+      p[i - 1][j] = {i, j};
+      q.push({i - 1, j});
     }
-    cout << s << "\n";
+    if(j > 0 && v[i][j - 1] != '#' && d[i][j - 1] > d[i][j] + 1) {
+      d[i][j - 1] = d[i][j] + 1;
+      p[i][j - 1] = {i, j};
+      q.push({i, j - 1});
+    }
+    if(i < n - 1 && v[i + 1][j] != '#' && d[i + 1][j] > d[i][j] + 1) {
+      d[i + 1][j] = d[i][j] + 1;
+      p[i + 1][j] = {i, j};
+      q.push({i + 1, j});
+    }
+    if(j < m - 1 && v[i][j + 1] != '#' && d[i][j + 1] > d[i][j] + 1) {
+      d[i][j + 1] = d[i][j] + 1;
+      p[i][j + 1] = {i, j};
+      q.push({i, j + 1});
+    }
   }
+
+  if(d[f.first][f.second] == 1000000000) {
+    cout << "NO\n";
+    return 0;
+  }
+
+  cout << "YES\n";
+  cout << d[f.first][f.second] << "\n";
+  string ans = "";
+  for(int i = f.first, j = f.second; 
+      i != s.first || j != s.second;) {
+    int n_i = p[i][j].first;
+    int n_j = p[i][j].second;
+    int diff_i = i - n_i;
+    int diff_j = j - n_j;
+    if(diff_i < 0) {
+      ans += "U";
+    } else if(diff_i > 0) {
+      ans += "D";
+    } else if(diff_j < 0) {
+      ans += "L";
+    } else {
+      ans += "R";
+    }
+    i = n_i; j = n_j;
+  }
+  reverse(ans.begin(), ans.end());
+  cout << ans << "\n";
+  cout << "\n";
   return 0;
 }
