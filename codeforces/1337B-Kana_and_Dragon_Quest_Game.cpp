@@ -12,18 +12,13 @@ int main(){
 	while(t--){
 		muerto = 0;
 		cin >> x >> n >> m;
-		for(i = 0; i < n; i++){
-			if(x / 2 >= 10)
-				x = x / 2 + 10;
-			else break;
-		}
-		for(i = 0; i < m; i++){
-			x -= 10;
-			if(x <= 0){
-				muerto = 1;
-				break;
-			}
-		}
+    
+    while(x > 0 && n > 0 && x - m * 10 > 0) {
+      x /= 2;
+      x += 10;
+      n--;
+    }
+    if(x <= m * 10) muerto = 1;
 
 		if(muerto) cout << "Yes\n";
 		else cout << "No\n";
