@@ -27,10 +27,8 @@ bool isSmaller(string str1, string str2)
 
 int mod(string num, int a) 
 { 
-    // Initialize result 
     int res = 0; 
   
-    // One by one process all digits of 'num' 
     for (int i = 0; i < num.length(); i++) 
          res = (res*10 + (int)num[i] - '0') %a; 
   
@@ -52,20 +50,15 @@ ll powerLL(ll x, ll n)
   
 ll powerStrings(string sa, string sb) 
 { 
-    // We convert strings to number  
   
     ll a = 0, b = 0; 
   
-    // calculating  a % MOD 
     for (int i = 0; i < sa.length(); i++) 
         a = (a * 10 + (sa[i] - '0')) % MOD; 
   
-    // calculating  b % (MOD - 1) 
     for (int i = 0; i < sb.length(); i++) 
         b = (b * 10 + (sb[i] - '0')) % (MOD - 1); 
   
-    // Now a and b are long long int. We 
-    // calculate a^b using modulo exponentiation 
     return powerLL(a, b); 
 } 
 
@@ -174,7 +167,6 @@ int main()
     cout.precision(4);
     string a,b,c;
     long long d;
-    string l[] = {"5","8","13","16","21","24","29","32","37","40"};
     cin >> a;	
 
 	c = longDivision(findSum(multiply("3",multiply(a,a)),a),2); 
