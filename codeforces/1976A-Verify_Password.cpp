@@ -29,22 +29,40 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int n;
+    cin >> n;
+    string password;
+    cin >> password;
+    stack< char > cs;
+    stack< char > ds;
+
+    bool flag = true;
+    for(int i = 0; i < password.length(); i++) {
+      if(password[i] >= '0' && password[i] <= '9') {
+        if(cs.size() > 0) {
+          flag = false;
+          break;
+        }
+        if(ds.size() > 0 && ds.top() > password[i]) {
+          flag = false;
+          break;
+        }
+        ds.push(password[i]);
+      } else {
+        if(cs.size() > 0 && cs.top() > password[i]) {
+          flag = false;
+          break;
+        }
+        cs.push(password[i]);
       }
-      ans += ((ld) 1 - prob);
     }
-    cout << ans << "\n";
+    if(flag) cout << "YES\n";
+    else cout << "NO\n";
   }
   return 0;
 }

@@ -5,6 +5,18 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
+template< typename T >
+ostream& operator<<(ostream& os, const vector< T > &vec) {
+  os << "[";
+  for(uint64_t i = 0; i < vec.size(); i++) {
+    os << vec[i];
+    if(i != vec.size() - 1)
+      os << ", ";
+  }
+  os << "]";
+  return os;
+}
+
 #define DBG(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
@@ -24,27 +36,48 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
+int compute_lcm(vi &nums) {
+  int lcm = 1;
+  fn(i, nums.size()) {
+    lcm *= nums[i] / gcd(nums[i], lcm);
+  }
+  return lcm;
+}
+
+bool check(vi &nums, int maxi) {
+  int sum = 0;
+
+  fn(i, nums.size()) sum += nums[i];
+
+  return maxi > sum;
+}
+
 int main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int n;
+    cin >> n;
+    vi nums(n);
+    fn(i, n) cin >> nums[i];
+
+    int lcm_ = compute_lcm(nums);
+
+    vi answer(n);
+    fn(i, n) answer[i] = lcm_ / nums[i];
+    
+    if(check(answer, lcm_)) {
+      feach(x, answer) {
+        cout << x << " ";
       }
-      ans += ((ld) 1 - prob);
-    }
-    cout << ans << "\n";
+      cout << "\n";
+    } else cout << -1 << "\n";
   }
   return 0;
 }

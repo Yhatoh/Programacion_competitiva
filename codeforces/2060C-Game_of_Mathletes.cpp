@@ -5,7 +5,7 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -24,25 +24,48 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
+template< typename T >
+ostream& operator<<(ostream& os, const vector< T > &vec) {
+  os << "[";
+  for(uint64_t i = 0; i < vec.size(); i++) {
+    os << vec[i];
+    if(i != vec.size() - 1)
+      os << ", ";
+  }
+  os << "]";
+  return os;
+}
+
 int main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
     int n, k;
     cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+
+    vi nums(n);
+    fn(i, n) cin >> nums[i];
+
+    sort(nums.begin(), nums.end());
+
+    int i, j;
+    i = 0; j = n - 1;
+    int ans = 0;
+    while(i < j) {
+      if(nums[i] + nums[j] == k) {
+        ans++;
+        i++; j--;
+      } else if(nums[i] + nums[j] < k) {
+        i++;
+      } else {
+        j--;
       }
-      ans += ((ld) 1 - prob);
     }
     cout << ans << "\n";
   }

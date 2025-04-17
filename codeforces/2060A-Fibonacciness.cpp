@@ -5,7 +5,7 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -29,21 +29,28 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
-    }
+    vi a(4);
+    fn(i, 4) cin >> a[i];
+
+    int a3 = a[0] + a[1];
+    int ans = (a[0] + a[1] == a3) +
+              (a[1] + a3 == a[2]) +
+              (a[2] + a3 == a[3]);
+
+    a3 = a[2] - a[1];
+    ans = max(ans, (a[0] + a[1] == a3) +
+              (a[1] + a3 == a[2]) +
+              (a[2] + a3 == a[3]));
+
+    a3 = a[3] - a[2];
+    ans = max(ans, (a[0] + a[1] == a3) +
+              (a[1] + a3 == a[2]) +
+              (a[2] + a3 == a[3]));
     cout << ans << "\n";
   }
   return 0;

@@ -29,22 +29,17 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
-    }
-    cout << ans << "\n";
+    vi nums(3);
+    cin >> nums[0] >> nums[1] >> nums[2];
+
+    sortv(nums);
+
+    cout << nums[1] - nums[0] + nums[2] - nums[1] << "\n";
   }
   return 0;
 }

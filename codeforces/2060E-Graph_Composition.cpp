@@ -5,7 +5,7 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << endl;
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -24,27 +24,82 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
+void dfs(vvi &g, vi &vis, set< pii > &check, int comp, int u, int type) {
+  vis[u] = comp;
+  feach(v, g[u]) {
+    bool visit = false;
+    if(type && vis[v] == -1) {
+      visit = true;
+    } else if(!type && vis[v] == -1 && check.find({u, v}) == check.end()) {
+      visit = true;
+    }
+    if(visit)
+      dfs(g, vis, check, comp, v, type);
+  }
+}
+
+void exec_dfs(vvi &g, vi &vis,
+              set< pii >& check, int &comps, int type) {
+  comps = 0;
+  fn(i, g.size()) {
+    if(vis[i] == -1) {
+      dfs(g, vis, check, comps, i, type);
+      comps++;
+    }
+  }
+}
+
+void read_graph(vvi &g, int m) {
+  fn(i, m) {
+    int a, b;
+    cin >> a >> b;
+    a--; b--;
+    g[a].push_back(b);
+    g[b].push_back(a);
+  }
+}
+
 int main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int n, m1, m2;
+    cin >> n >> m1 >> m2;
+
+    vvi G(n);
+    vi vis_G(n, -1);
+    vvi F(n);
+    vi vis_F(n, -1);
+
+    read_graph(F, m1);
+    read_graph(G, m2);
+
+    set< pair< int, int > > check;
+    int comps_G = 0;
+    exec_dfs(G, vis_G, check, comps_G, 1);
+
+    int remove = 0;
+    fn(u, n) {
+      feach(v, F[u]) {
+        if(vis_G[u] != vis_G[v] &&
+           check.find({u, v}) == check.end()) {
+          remove++;
+          check.insert({u, v});
+          check.insert({v, u});
+        }
       }
-      ans += ((ld) 1 - prob);
     }
-    cout << ans << "\n";
+
+    int comps_F = 0;
+    exec_dfs(F, vis_F, check, comps_F, 0);
+
+    cout << remove + (comps_F - comps_G) << "\n";
   }
   return 0;
 }

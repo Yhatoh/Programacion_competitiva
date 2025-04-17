@@ -24,27 +24,55 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
+char flip(char x) {
+  if(x == 'U') return 'D';
+  return 'U';
+}
+
 int main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    bool turn = 1;
+    while(s.size()) {
+      int pos = -1;
+      fn(i, s.size()) {
+        if(i > 0 && s[i] == s[i - 1] && s[i] == s[(i + 1) % s.size()] && s[i] == 'U') pos = i;
+        else if(s[i] == s[s.size() - 1] && s[i] == s[(i + 1) % s.size()] && s[i] == 'U') pos = i;
       }
-      ans += ((ld) 1 - prob);
+
+      if(pos == -1) {
+        fn(i, s.size()) {
+          if(i > 0 && (s[i] == s[i - 1] || s[i] == s[(i + 1) % s.size()]) && s[i] == 'U') pos = i;
+          else if((s[i] == s[s.size() - 1] || s[i] == s[(i + 1) % s.size()]) && s[i] == 'U') pos = i;
+        }
+        if(pos == -1) {
+          fn(i, s.size()) {
+            if(s[i] == 'U') pos = i;
+          }
+          if(pos == -1) {
+            break;
+          }
+        }
+      }
+      if(pos > 0) s[pos - 1] = flip(s[pos - 1]);
+      else s[s.size() - 1] = flip(s[s.size() - 1]);
+      s[(pos + 1) % s.size()] = flip(s[(pos + 1) % s.size()]);
+      s.erase(s.begin() + pos);
+      turn = !turn;
     }
-    cout << ans << "\n";
+    if(turn) cout << "NO\n";
+    else cout << "YES\n";
   }
   return 0;
 }

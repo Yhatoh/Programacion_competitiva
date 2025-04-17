@@ -5,7 +5,7 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -24,27 +24,76 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
+template< typename T, typename T2 >
+ostream& operator<<(ostream& os, const pair< T, T2 > &p) {
+  os << "(" << p.first << "," << p.second << ")";
+  return os;
+}
+ 
+template< typename T >
+ostream& operator<<(ostream& os, const vector< T > &vec) {
+  os << "[";
+  for(uint64_t i = 0; i < vec.size(); i++) {
+    os << vec[i];
+    if(i != vec.size() - 1)
+      os << ", ";
+  }
+  os << "]";
+  return os;
+}
+
 int main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int n, m;
+    cin >> n >> m;
+    vector< pair< vector< int >, int > > 
+      cows(n, pair< vector< int >, int >(vi(m, 0), 0));
+    fn(i, n) {
+      fn(j, m) {
+        cin >> cows[i].first[j];
       }
-      ans += ((ld) 1 - prob);
+      cows[i].second = i;
+      sort(cows[i].first.begin(), cows[i].first.end());
+      reverse(cows[i].first.begin(), cows[i].first.end());
     }
-    cout << ans << "\n";
+
+    sort(cows.begin(), cows.end());
+    int top = -1;
+    fn(j, m) {
+      bool flag = true;
+      fn(i, n) {
+        if(top < cows[i].first.back()) {
+          top = cows[i].first.back();
+          cows[i].first.pop_back();
+        } else {
+          flag = false;
+          break;
+        }
+      }
+      if(!flag) break;
+    }
+
+    bool flag2 = true;
+    fn(i, n) {
+      if(cows[i].first.size() != 0) {
+        flag2 = false;
+        break;
+      }
+    }
+
+    if(!flag2) cout << -1 << "\n";
+    else {
+      fn(i, n) cout << cows[i].second + 1 << " ";
+      cout << "\n";
+    }
   }
   return 0;
 }

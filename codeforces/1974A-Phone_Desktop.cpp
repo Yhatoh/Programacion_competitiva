@@ -29,22 +29,24 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int x, y;
+    cin >> x >> y;
+
+    int screen = ceil((double) y / 2.0);
+
+    if(screen == 0) cout << (int)ceil((double) x / 15) << "\n";
+    else {
+      if(y % 2) {
+        x -= 4;
       }
-      ans += ((ld) 1 - prob);
+      if(screen * 7 > x) cout << screen << "\n";
+      else cout << screen + (int)ceil((x - 7 * screen) / 15.0) << "\n";
     }
-    cout << ans << "\n";
   }
   return 0;
 }

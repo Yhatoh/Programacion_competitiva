@@ -24,25 +24,33 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
-int main() {
+#define int long long
+signed main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int n;
+    cin >> n;
+    vi nums(n);
+    fn(i, n) cin >> nums[i];
+
+    int maxi_num = nums[0];
+    int ans = nums[0] == 0;
+    int suma = 0;
+    flr(i, 1, n) {
+      if(nums[i] > maxi_num) {
+        suma += maxi_num;
+        maxi_num = nums[i];
+      } else {
+        suma += nums[i];
       }
-      ans += ((ld) 1 - prob);
+      if(suma == maxi_num) ans++;
     }
     cout << ans << "\n";
   }

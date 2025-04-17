@@ -14,6 +14,18 @@ using namespace std;
 #define feach(x, ds) for(auto &x : ds)
 #define sortv(vec) sort(vec.begin(), vec.end())
 
+template< typename T >
+ostream& operator<<(ostream& os, const vector< T > &vec) {
+  os << "[";
+  for(uint64_t i = 0; i < vec.size(); i++) {
+    os << vec[i];
+    if(i != vec.size() - 1)
+      os << ", ";
+  }
+  os << "]";
+  return os;
+}
+
 typedef vector< int > vi; typedef vector< vi > vvi;
 typedef pair< int, int > pii; typedef vector< pii > vpii;
 typedef vector< vpii > vvpii;
@@ -29,22 +41,60 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    string s;
+    cin >> s;
+    string new_s = "D";
+    feach(c, s) {
+      if(c == 'L') continue;
+      new_s += c;
     }
-    cout << ans << "\n";
+    new_s += "D";
+    vi run_w;
+    vi run_d;
+
+    int count = 0;
+    bool flag = true;
+    feach(c, new_s) {
+      if(flag && c == 'D') {
+        count++;
+      } else if(flag && c == 'W') {
+        run_d.push_back(count);
+        count = 1;
+        flag = false;
+      } else if(!flag && c == 'W') {
+        count++;
+      } else {
+        flag = true;
+        run_w.push_back(count);
+        count = 1;
+      }
+    }
+    if(flag && count > 0) run_d.push_back(count);
+    else if(!flag && count > 0) run_w.push_back(count);
+
+    auto wins = [] (int w) { return (w >= 3 ? 2 * w + (w - 2) : w * 2); };
+
+    auto p = [=](int w1, int d, int w2) {
+      return wins(w1) + d + wins(w2) <= wins(w1 + w2);
+    };
+
+    frle(i, 1, run_d.size() - 2) {
+      if(i - 1 < run_w.size() && i < run_w.size()) {
+        if(p(run_w[i - 1], run_d[i], run_w[i])) {
+          run_d[i] = 0;
+          run_w[i - 1] += run_w[i];
+          run_w[i] = 0;
+        }
+      }
+    }
+    int ans = 0;
+    feach(x, run_d) ans += x;
+    feach(x, run_w) ans += (x >= 3 ? 2 * x + x - 2 : x * 2);
+    cout << ans - 2 << "\n";
   }
   return 0;
 }

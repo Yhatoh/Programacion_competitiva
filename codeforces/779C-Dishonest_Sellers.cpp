@@ -5,7 +5,25 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+template< typename T, typename T2 >
+ostream& operator<<(ostream& os, const pair< T, T2 > &p) {
+  os << "(" << p.first << "," << p.second << ")";
+  return os;
+}
+
+template< typename T >
+ostream& operator<<(ostream& os, const vector< T > &vec) {
+  os << "[";
+  for(uint64_t i = 0; i < vec.size(); i++) {
+    os << vec[i];
+    if(i != vec.size() - 1)
+      os << ", ";
+  }
+  os << "]";
+  return os;
+}
+
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -29,20 +47,37 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
   while(t--) {
     int n, k;
     cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    vector< pair< int, pii > > items(n);
+    fn(i, n) {
+      cin >> items[i].second.first;
+    }
+
+    fn(i, n) {
+      cin >> items[i].second.second;
+    }
+
+    fn(i, n) {
+      items[i].first = items[i].second.first - items[i].second.second;
+    }
+    sort(items.begin(), items.end());
+
+    int ans = 0;
+    int buy = 0;
+    fn(i, n) {
+      if(buy < k) {
+        ans += items[i].second.first;
+        buy++;
+      } else if(items[i].second.second < items[i].second.first) {
+        ans += items[i].second.second;
+      } else {
+        ans += items[i].second.first;
       }
-      ans += ((ld) 1 - prob);
     }
     cout << ans << "\n";
   }

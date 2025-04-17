@@ -29,22 +29,29 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    int n;
+    cin >> n;
+    vi nums(n);
+    fn(i, n - 1) cin >> nums[i];
+
+    vi res = {600};
+    fn(i, n - 1) {
+      res.push_back(nums[i] + res[i]);
     }
-    cout << ans << "\n";
+
+    bool check = true;
+    flr(i, 1, res.size()) {
+      if(res[i] % res[i - 1] != nums[i - 1]) check = false;
+    }
+
+    if(check) feach(x, res) cout << x << " ";
+    else cout << "CTM";
+    cout << "\n";
   }
   return 0;
 }

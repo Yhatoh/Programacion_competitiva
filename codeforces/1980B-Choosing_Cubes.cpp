@@ -24,27 +24,62 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
+template< typename T, typename T2 >
+ostream& operator<<(ostream& os, const pair< T, T2 > &p) {
+  os << "(" << p.first << "," << p.second << ")";
+  return os;
+}
+
+template< typename T >
+ostream& operator<<(ostream& os, const vector< T > &vec) {
+  os << "[";
+  for(uint64_t i = 0; i < vec.size(); i++) {
+    os << vec[i];
+    if(i != vec.size() - 1)
+      os << ", ";
+  }
+  os << "]";
+  return os;
+}
+
+bool fun(pii a, pii b) {
+  if(a.first == b.first)
+    return a.second < b.second;
+  return a.first > b.first;
+}
+
 int main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    int n, f, k;
+    cin >> n >> f >> k;
+    vpii nums(n);
+    fn(i, n) {
+      cin >> nums[i].first;
+      nums[i].second = i;
     }
-    cout << ans << "\n";
+    nums[f - 1].second = -1;
+    sort(nums.begin(), nums.end(), fun);
+
+    bool flag = false;
+    bool maybe = false;
+    fn(i, k) {
+      if(nums[i].second == -1) {
+        flag = true;
+        if(k < n && nums[k].first == nums[i].first) maybe = true;
+        break;
+      }
+    }
+    if(maybe) cout << "MAYBE\n";
+    else if(flag) cout << "YES\n";
+    else cout << "NO\n";
   }
   return 0;
 }

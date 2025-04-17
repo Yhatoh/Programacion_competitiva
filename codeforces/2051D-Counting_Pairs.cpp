@@ -2,10 +2,11 @@
 Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de mi vida los consagré exclusivamente al altruismo y al efecto hice mi primer testamento en 1894, legando a la sociedad de Valparaíso una Universidad, pero en el transcurso del tiempo, la experiencia me demostró que aquello era un error y que era de importancia capital levantar al proletario de mi patria, concibiendo un plan, por el cual contribuyo, primeramente con mi óbolo a la infancia, enseguida a la Escuela Primaria, de ella a la Escuela de Artes y Oficios y por último al Colegio de Ingenieros, poniendo al alcance del desvalido meritorio llegar al más alto grado del saber humano.
 */
 
+#include <algorithm>
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -24,27 +25,61 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
+template< typename T >
+ostream& operator<<(ostream& os, const vector< T > &vec) {
+  os << "[";
+  for(uint64_t i = 0; i < vec.size(); i++) {
+    os << vec[i];
+    if(i != vec.size() - 1)
+      os << ", ";
+  }
+  os << "]";
+  return os;
+}
+
+bool cond(ll v, ll x, ll y) {
+  return v >= x && v <= y;
+}
+
 int main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    ll n, x, y;
+    cin >> n >> x >> y;
+    vll nums(n);
+    ll sum = 0;
+    fn(i, n) {
+      cin >> nums[i];
+      sum += nums[i];
     }
-    cout << ans << "\n";
+
+    sortv(nums);
+    ll upper_sum = sum - x;
+    ll lower_sum = sum - y;
+    ll ans = 0;
+    flr(i, 0, n) {
+      ll num = nums[i];
+      auto lower_ =
+        lower_bound(nums.begin(), nums.end(), lower_sum - num);
+      auto upper_ =
+        upper_bound(nums.begin(), nums.end(), upper_sum - num);
+
+      if(lower_ == upper_) continue;
+
+      int pos_lower = lower_ - nums.begin();
+      int pos_upper = upper_ - nums.begin();
+
+      ans += pos_upper - pos_lower;
+      if(pos_lower <= i && pos_upper > i) ans -= 1;
+    }
+    cout << ans / 2 << "\n";
   }
   return 0;
 }

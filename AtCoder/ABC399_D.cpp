@@ -5,7 +5,7 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -24,27 +24,62 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
+template< typename T, typename T2 >
+ostream& operator<<(ostream& os, const map< T, T2 > &m) {
+  os << "{";
+  for(auto p : m) {
+    os << "(" << p.first << "," << p.second << ")";
+    os << " ";
+  }
+  os << "}";
+  return os;
+}
+
 int main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    int n;
+    cin >> n;
+    vi seats(2 * n);
+    fn(i, 2 * n) {
+      cin >> seats[i];
     }
-    cout << ans << "\n";
+
+    vi where(n + 1, -1);
+    map< int, int > mp;
+
+    fn(i, 2 * n) {
+      if(where[seats[i]] == -1) {
+        where[seats[i]] = i;
+      } else {
+        mp[i] = where[seats[i]];
+        mp[where[seats[i]]] = i;
+      }
+    }
+
+    int count = 0;
+    fn(i, 2 * n) {
+      // adjacent
+      if(abs(i - mp[i]) == 1) continue;
+
+      if(i > 0) {
+        if(abs(mp[i - 1] - mp[i]) == 1 &&
+           abs(mp[i - 1] - (i - 1)) > 1) count++;
+      }
+      if(i < 2 * n - 1) {
+        if(abs(mp[i + 1] - mp[i]) == 1 &&
+           abs(mp[i + 1] - (i + 1)) > 1) count++;
+      }   
+    }
+    count /= 4;
+    cout << count << "\n";
   }
   return 0;
 }

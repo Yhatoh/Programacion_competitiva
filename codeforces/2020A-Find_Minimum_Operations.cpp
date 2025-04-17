@@ -5,7 +5,7 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -24,27 +24,54 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
+ll binpow(ll a, ll b, ll m) {
+  a %= m;
+  ll res = 1;
+  while (b > 0) {
+    if (b & 1)
+      res = (res * a) % m;
+    a = (a * a) % m;
+    b >>= 1;
+  }
+  return res;
+}
+
 int main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
     int n, k;
     cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+
+    if(k == 1) cout << n << "\n";
+    else if(n < k) cout << n << "\n";
+    else if(n == k) cout << 1 << "\n";
+    else {
+      int ans = 0;
+      while(n > 0) {
+        if(n < k) {
+          ans += n;
+          break;
+        }
+        int save = n;
+        int pow = 0;
+        while(n >= k) {
+          n /= k;
+          pow++;
+        }
+        ll pow_k = binpow(k, pow, 1000000000);
+        n = save;
+        n -= pow_k;
+        ans += 1;
       }
-      ans += ((ld) 1 - prob);
+      cout << ans << "\n";
     }
-    cout << ans << "\n";
   }
   return 0;
 }

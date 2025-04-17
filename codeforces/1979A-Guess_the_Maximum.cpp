@@ -29,22 +29,19 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
-    }
-    cout << ans << "\n";
+    int n;
+    cin >> n;
+    vi nums(n);
+    fn(i, n) cin >> nums[i];
+
+    int maxi = 1000000001;
+    fn(i, n - 1) maxi = min(max(nums[i], nums[i + 1]) - 1, maxi);
+    cout << maxi << "\n";
   }
   return 0;
 }

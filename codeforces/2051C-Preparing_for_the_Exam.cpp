@@ -5,7 +5,7 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -29,22 +29,37 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int n, m, k;
+    cin >> n >> m >> k;
+    vi qs(m);
+    fn(i, m) cin >> qs[i];
+    vi known(k);
+    fn(i, k) cin >> known[i];
+
+    vi ans(m, 0);
+    if(k == n) {
+      fn(i, m) ans[i] = 1;
+    } else if(k == n - 1) {
+      set< int > known2;
+      fn(i, k) known2.insert(known[i]);
+      int which = -1;
+      flre(i, 1, n)
+        if(known2.find(i) == known2.end()) {
+          which = i;
+          break;
+        }
+      fn(i, m) {
+        if(qs[i] == which) ans[i] = 1;
+        else ans[i] = 0;
       }
-      ans += ((ld) 1 - prob);
     }
-    cout << ans << "\n";
+    feach(x, ans) cout << x << "";
+    cout << "\n";
   }
   return 0;
 }

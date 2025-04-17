@@ -29,22 +29,28 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    int n;
+    cin >> n;
+    vi prof(n, 0);
+    vi v(n);
+    fn(i, n) {
+      cin >> v[i];
+      prof[i] = i;
     }
-    cout << ans << "\n";
+
+    int pos = 0;
+    while(v.size() > 1) {
+      pos = (pos + v[pos] - 1) % v.size();
+      v.erase(v.begin() + pos);
+      prof.erase(prof.begin() + pos);
+      if(pos == v.size()) pos = 0;
+    }
+
+    cout << prof[0] + 1 << "\n";
   }
   return 0;
 }

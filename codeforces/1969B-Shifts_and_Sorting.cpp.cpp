@@ -24,25 +24,59 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
-int main() {
+template< typename T >
+ostream& operator<<(ostream& os, const vector< T > &vec) {
+  os << "[";
+  for(uint64_t i = 0; i < vec.size(); i++) {
+    os << vec[i];
+    if(i != vec.size() - 1)
+      os << ", ";
+  }
+  os << "]";
+  return os;
+}
+
+signed main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    string s;
+    cin >> s;
+    s = "0" + s;
+    int n = s.length();
+    vi runs_1;
+    vi runs_0;
+    bool flag = 1;
+    int amount = 1;
+    flr(i, 1, n) {
+      if(flag && s[i] == '0') amount++;
+      else if(flag) {
+        runs_0.push_back(amount);
+        amount = 1;
+        flag = 0;
+      } else if(!flag && s[i] == '1') amount++;
+      else {
+        runs_1.push_back(amount);
+        amount = 1;
+        flag = 1;
       }
-      ans += ((ld) 1 - prob);
+    }
+
+    if(flag) runs_0.push_back(amount);
+    else runs_1.push_back(amount);
+
+    int ans = 0;
+    int acum = 0;
+    fn(i, runs_1.size()) {
+      if(i + 1 == runs_0.size()) break;
+      ans += (runs_1[i] + 1 + acum) * runs_0[i + 1];
+      acum += runs_1[i];
     }
     cout << ans << "\n";
   }

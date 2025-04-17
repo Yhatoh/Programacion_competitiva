@@ -29,20 +29,37 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    int n;
+    cin >> n;
+    vi nums(n);
+    fn(i, n) cin >> nums[i];
+
+    map< ll, map< ll, ll > > mp12;
+    map< ll, map< ll, ll > > mp23;
+    map< ll, map< ll, ll > > mp13;
+
+    map< ll, map< ll, map< ll, ll > > > mp12_eq;
+    ll ans = 0;
+    fn(i, n - 2) {
+      int a, b, c;
+      a = nums[i];
+      b = nums[i + 1];
+      c = nums[i + 2];
+
+      ans += mp12[a][b];
+      ans += mp23[b][c];
+      ans += mp13[a][c];
+
+      ans -= mp12_eq[a][b][c] * 3;
+      mp12[a][b]++;
+      mp23[b][c]++;
+      mp13[a][c]++;
+      mp12_eq[a][b][c]++;
     }
     cout << ans << "\n";
   }

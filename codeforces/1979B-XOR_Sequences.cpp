@@ -14,6 +14,18 @@ using namespace std;
 #define feach(x, ds) for(auto &x : ds)
 #define sortv(vec) sort(vec.begin(), vec.end())
 
+template< typename T >
+ostream& operator<<(ostream& os, const vector< T > &vec) {
+  os << "[";
+  for(uint64_t i = 0; i < vec.size(); i++) {
+    os << vec[i];
+    if(i != vec.size() - 1)
+      os << ", ";
+  }
+  os << "]";
+  return os;
+}
+
 typedef vector< int > vi; typedef vector< vi > vvi;
 typedef pair< int, int > pii; typedef vector< pii > vpii;
 typedef vector< vpii > vvpii;
@@ -29,20 +41,47 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int x, y;
+    cin >> x >> y;
+
+    vi bin_x(32);
+    vi bin_y(32);
+
+    int aux = x;
+    int bit = 0;
+    while(x > 0) {
+      bin_x[bit] = x % 2;
+      x /= 2;
+      bit++;
+    }
+
+    aux = y;
+    bit = 0;
+    while(y > 0) {
+      bin_y[bit] = y % 2;
+      y /= 2;
+      bit++;
+    }
+
+    vi start_x(32, 0);
+    vi start_y(32, 0);
+
+    fn(i, 32) {
+      if(bin_x[i] != bin_y[i]) {
+        if(bin_x[i] == 1) start_x[i] = 1;
+        if(bin_y[i] == 1) start_y[i] = 1;
       }
-      ans += ((ld) 1 - prob);
+    }
+
+    int ans = 1;
+    fn(i, 32) {
+      if(start_x[i] == 0 && start_y[i] == 0) ans *= 2;
+      else break;
     }
     cout << ans << "\n";
   }

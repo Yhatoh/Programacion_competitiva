@@ -5,7 +5,7 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -29,22 +29,25 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
   while(t--) {
-    int n, k;
+    ll n, k;
     cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+
+    ll sum = k * (k + 1) / 2;
+    map< ll, bool > mp;
+    fn(i, n) {
+      ll a;
+      cin >> a;
+      if(a > k) continue;
+      if(mp[a] == 0) {
+        sum -= a;
+        mp[a] = 1;
       }
-      ans += ((ld) 1 - prob);
     }
-    cout << ans << "\n";
+    cout << sum << "\n";
   }
   return 0;
 }

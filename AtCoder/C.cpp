@@ -29,22 +29,35 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    int n;
+    cin >> n;
+
+    typedef pair< int, pair< int, int > > str_cost_index;
+    vector< str_cost_index > cards(n);
+
+    fn(i, n) {
+      cin >> cards[i].first >> cards[i].second.first;
+      cards[i].second.second = i + 1;
     }
-    cout << ans << "\n";
+
+    sortv(cards);
+    reverse(cards.begin(), cards.end());
+    set< int > final_cards;
+    final_cards.insert(cards[0].second.second);
+    int mini_cost = cards[0].second.first;
+    flr(i, 1, n) {
+      if(mini_cost > cards[i].second.first) {
+        mini_cost = cards[i].second.first;
+        final_cards.insert(cards[i].second.second);
+      }
+    }
+    cout << final_cards.size() << "\n";
+    feach(x, final_cards) cout << x << " ";
+    cout << "\n";
   }
   return 0;
 }

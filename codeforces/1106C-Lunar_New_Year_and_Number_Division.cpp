@@ -5,7 +5,7 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -13,6 +13,7 @@ using namespace std;
 #define frle(i,l,r) for(int i = r; i >= l; i--)
 #define feach(x, ds) for(auto &x : ds)
 #define sortv(vec) sort(vec.begin(), vec.end())
+#define neovim freopen("input.txt","r",stdin);
 
 typedef vector< int > vi; typedef vector< vi > vvi;
 typedef pair< int, int > pii; typedef vector< pii > vpii;
@@ -25,25 +26,26 @@ typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
 int main() {
+#ifdef debug
+  neovim
+#endif
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
-    }
+    int n;
+    cin >> n;
+    vi nums(n);
+    fn(i, n) cin >> nums[i];
+
+    sortv(nums);
+    ll ans = 0;
+    fn(i, n / 2) ans += (nums[i] + nums[n - i - 1]) * (nums[i] + nums[n - i - 1]);
+
     cout << ans << "\n";
   }
   return 0;

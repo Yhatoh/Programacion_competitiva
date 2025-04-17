@@ -29,22 +29,91 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    int n;
+    cin >> n;
+    vi nums(n);
+
+    fn(i, n) cin >> nums[i];
+
+    vi gcds(n - 1);
+    fn(i, n - 1) {
+      gcds[i] = gcd(nums[i], nums[i + 1]);
     }
-    cout << ans << "\n";
+
+    bool flag = true;
+    int index = -1;
+    fn(i, n - 2) {
+      if(gcds[i] > gcds[i + 1]) {
+        index = i + 1;
+        flag = false;
+        break;
+      }
+    }
+
+    if(flag) cout << "YES\n";
+    else {
+      vi aux = nums;
+      nums.erase(nums.begin() + index + 1);
+
+      gcds.resize(n - 2);
+      fn(i, n - 2) {
+        gcds[i] = gcd(nums[i], nums[i + 1]);
+      }
+
+      bool flag = true;
+      fn(i, n - 3) {
+        if(gcds[i] > gcds[i + 1]) {
+          flag = false;
+          break;
+        }
+      }
+      if(flag) {
+        cout << "YES\n";
+      } else {
+      
+        nums = aux;
+        nums.erase(nums.begin() + index);
+
+        gcds.resize(n - 2);
+        fn(i, n - 2) {
+          gcds[i] = gcd(nums[i], nums[i + 1]);
+        }
+
+        bool flag = true;
+        fn(i, n - 3) {
+          if(gcds[i] > gcds[i + 1]) {
+            flag = false;
+            break;
+          }
+        }
+        if(flag) cout << "YES\n";
+        else {
+          nums = aux;
+          nums.erase(nums.begin() + index - 1);
+
+          gcds.resize(n - 2);
+          fn(i, n - 2) {
+            gcds[i] = gcd(nums[i], nums[i + 1]);
+          }
+
+          bool flag = true;
+          fn(i, n - 3) {
+            if(gcds[i] > gcds[i + 1]) {
+              flag = false;
+              break;
+            }
+          }
+
+          if(flag) cout << "YES\n";
+          else cout << "NO\n";
+        }
+      }
+    }
   }
   return 0;
 }

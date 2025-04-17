@@ -29,22 +29,32 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    int n;
+    cin >> n;
+    map< string, int > mp;
+
+    int t = 0;
+    fn(i, n) {
+      string s;
+      int c;
+      cin >> s >> c;
+      mp[s] = c;
+      t += c;
     }
-    cout << ans << "\n";
+
+    int assign = t % n;
+    int count = 0;
+    feach(p, mp) {
+      if(count == assign) {
+        cout << p.first << "\n";
+        return 0;
+      }
+      count++;
+    }
   }
   return 0;
 }

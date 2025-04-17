@@ -20,31 +20,21 @@ typedef vector< vpii > vvpii;
 typedef long long ll; typedef vector< ll > vll;
 typedef vector< vll > vvll; typedef pair< ll, ll > pll;
 typedef vector< pll > vpll; typedef vector< vpll > vvpll;
-typedef long double ld; typedef vector< ld > vld;
-typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
-typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
 int main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
-    }
-    cout << ans << "\n";
+    uint64_t res = 0;
+    int N = 999;
+    cout << 3 * ((N / 3) * ((N / 3) + 1) / 2) +
+            5 * ((N / 5) * ((N / 5) + 1) / 2) -
+            15 * ((N / 15) * ((N / 15) + 1) / 2) << "\n";
   }
   return 0;
 }

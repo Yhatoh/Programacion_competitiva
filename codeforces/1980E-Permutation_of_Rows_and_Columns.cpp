@@ -29,22 +29,71 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int n, m;
+    cin >> n >> m;
+    vvi a(n, vi(m));
+    vvi b(n, vi(m));
+
+    fn(i, n) {
+      fn(j, m) {
+        cin >> a[i][j];
       }
-      ans += ((ld) 1 - prob);
     }
-    cout << ans << "\n";
+
+    fn(i, n) {
+      fn(j, m) {
+        cin >> b[i][j];
+      }
+    }
+
+    set< set< int > > rows_a;
+    fn(i, n) {
+      set< int > row;
+      fn(j, m) {
+        row.insert(a[i][j]);
+      }
+      rows_a.insert(row);
+    }
+
+    bool flag = true;
+    fn(i, n) {
+      set< int > row;
+      fn(j, m) {
+        row.insert(b[i][j]);
+      }
+      if(rows_a.find(row) == rows_a.end()) {
+        flag = false;
+        break;
+      }
+    }
+
+    set< set< int > > cols_a;
+    fn(i, m) {
+      set< int > row;
+      fn(j, n) {
+        row.insert(a[j][i]);
+      }
+      cols_a.insert(row);
+    }
+
+    fn(i, m) {
+      set< int > row;
+      fn(j, n) {
+        row.insert(b[j][i]);
+      }
+      if(cols_a.find(row) == cols_a.end()) {
+        flag = false;
+        break;
+      }
+    }
+
+    if(flag) cout << "YES\n";
+    else cout << "NO\n";
   }
   return 0;
 }

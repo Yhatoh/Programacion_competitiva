@@ -5,7 +5,7 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -29,20 +29,41 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int n;
+    cin >> n;
+    vll boards(n);
+    fn(i, n) cin >> boards[i];
+
+    stack< pair< ll, ll > > s;
+    ll ans = 0;
+    fn(i, n) {
+      //dbg(boards[i]);
+      if(s.empty()) {
+        s.push({i, boards[i]});
+      } else if(s.top().second >= boards[i]) {
+
+        int index = 0;
+        while(!s.empty() && s.top().second >= boards[i]) {
+          //dbg(ans);
+          //dbg(s.top().second * ((i - 1) - s.top().first + 1));
+          ans = max(ans, s.top().second * ((i - 1) - s.top().first + 1));
+          index = s.top().first;
+          s.pop();
+        }
+        //dbg(index);
+        s.push({index, boards[i]});
+      } else {
+        s.push({i, boards[i]});
       }
-      ans += ((ld) 1 - prob);
+      //dbg("--------------------");
+    }
+    while(!s.empty()) {
+      ans = max(ans, s.top().second * ((n - 1) - s.top().first + 1));
+      s.pop();
     }
     cout << ans << "\n";
   }

@@ -3,9 +3,10 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 */
 
 #include <bits/stdc++.h>
+#include <unistd.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -29,22 +30,35 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    bool flag = true;
+    stack< int > pila;
+    int bad_open = 0;
+    int bad_close = 0;
+    fn(i, s.length()) {
+      if(s[i] == '(') pila.push(1);
+      else {
+        if(!pila.empty()) pila.pop();
+        else {
+          bad_close++;
+          flag = false;
+        }
       }
-      ans += ((ld) 1 - prob);
     }
-    cout << ans << "\n";
+
+    if(pila.empty() && flag) cout << "Yes\n";
+    else {
+      bad_open = pila.size();
+      if(bad_open == 1 && bad_close == 1) cout << "Yes\n";
+      else cout << "No\n";
+    }
   }
   return 0;
 }

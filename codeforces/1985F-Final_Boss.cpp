@@ -24,27 +24,45 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
+bool fun(vll &d, vll &c, ll h, ll turn) {
+  ll damage = 0;
+  fn(i, d.size()) {
+    damage += d[i] * ((turn - 1) / c[i]) + d[i];
+    if(damage >= h) return true;
+  }
+  return false;
+}
+
 int main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    ll h, n;
+    cin >> h >> n;
+
+    vll d(n);
+    vll c(n);
+    fn(i, n) cin >> d[i];
+    fn(i, n) cin >> c[i];
+
+    ll l, r;
+    l = 1;
+    r = 1000000000000000;
+    while(l < r) {
+      ll mid = (l + r) / 2;
+      if(fun(d, c, h, mid)) {
+        r = mid;
+      } else {
+        l = mid + 1;
       }
-      ans += ((ld) 1 - prob);
     }
-    cout << ans << "\n";
+    cout << r << "\n";
   }
   return 0;
 }

@@ -24,27 +24,67 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
+template< typename T, typename T2 >
+ostream& operator<<(ostream& os, const pair< T, T2 > &p) {
+  os << "(" << p.first << "," << p.second << ")";
+  return os;
+}
+template< typename T >
+ostream& operator<<(ostream& os, const vector< T > &vec) {
+  os << "[";
+  for(uint64_t i = 0; i < vec.size(); i++) {
+    os << vec[i];
+    if(i != vec.size() - 1)
+      os << ", ";
+  }
+  os << "]";
+  return os;
+}
+
+bool fun(pair< int, char > a, pair< int, char > b) {
+  if(a.first != b.first) {
+    return a.first < b.first;
+  }
+  return a.second > b.second;
+}
 int main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int n, m;
+    cin >> n >> m;
+
+    string s;
+    cin >> s;
+    
+    vector< int > index(m);
+    fn(i, m) cin >> index[i];
+
+    vector< char > chars(m);
+    fn(i, m) cin >> chars[i];
+
+    sortv(index);
+    sortv(chars);
+
+    vi check(n, 0);
+    int i = 0;
+    int j = 0;
+    while(i < m && j < m) {
+      if(check[index[i] - 1] == 0) {
+        s[index[i] - 1] = chars[j];
+        check[index[i] - 1] = 1;
+        i++; j++;
+      } else {
+        i++;
       }
-      ans += ((ld) 1 - prob);
     }
-    cout << ans << "\n";
+    cout << s << "\n";
   }
   return 0;
 }

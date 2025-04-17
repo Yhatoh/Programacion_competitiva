@@ -29,22 +29,57 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    int n, k, pb, ps;
+    cin >> n >> k >> pb >> ps;
+
+    pb--;
+    ps--;
+    vi permut(n);
+    fn(i, n) {
+      cin >> permut[i];
+      permut[i]--;
     }
-    cout << ans << "\n";
+
+    vll values(n);
+    fn(i, n) cin >> values[i];
+
+    vi vis_b(n, 0);
+
+    ll max_b = 0;
+    ll acum_sum_b = 0;
+    ll k_b = k;
+    while(k_b > 0 && !vis_b[pb]) {
+      vis_b[pb] = 1;
+      max_b = max(max_b, acum_sum_b + values[pb] * k_b);
+
+      acum_sum_b += values[pb];
+      pb = permut[pb];
+      k_b--;
+    }
+
+    vi vis_s(n, 0);
+
+    ll max_s = 0;
+    ll acum_sum_s = 0;
+    ll k_s = k;
+    while(k_s > 0 && !vis_s[ps]) {
+      vis_s[ps] = 1;
+      max_s = max(max_s, acum_sum_s + values[ps] * k_s);
+
+      acum_sum_s += values[ps];
+      ps = permut[ps];
+      k_s--;
+    }
+
+    if(max_b > max_s) cout << "Bodya";
+    else if(max_s > max_b) cout << "Sasha";
+    else cout << "Draw";
+    cout << "\n";
   }
   return 0;
 }

@@ -24,27 +24,48 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
+template< typename T, typename T2 >
+ostream& operator<<(ostream& os, const map< T, T2 > &m) {
+  os << "{";
+  for(auto p : m) {
+    os << "(" << p.first << "," << p.second << ")";
+    os << " ";
+  }
+  os << "}";
+  return os;
+}
 int main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    set< char > letters;
+    for(auto c : s) {
+      letters.insert(c);
     }
-    cout << ans << "\n";
+
+    map< char, int > c_p;
+    map< int, char > p_c;
+    int pos = 0;
+    feach(x, letters) {
+      c_p[x] = pos;
+      p_c[pos] = x;
+      pos++;
+    }
+
+    fn(i, n) {
+      s[i] = p_c[pos - 1 - c_p[s[i]]];
+    }
+    cout << s << "\n";
   }
   return 0;
 }

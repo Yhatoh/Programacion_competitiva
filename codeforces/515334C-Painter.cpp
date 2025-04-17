@@ -24,27 +24,78 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
+struct Update {
+  ll type, x1, y1, x2, y2;
+  char col;
+  Update() {}
+  Update(ll type_, ll x1_, ll y1_, ll x2_, ll y2_, char col_) :
+    type(type_), x1(x1_), y1(y1_), x2(x2_), y2(y2_), col(col_) {}
+};
+
+bool check(ll i, ll j, ll x, ll y, ll r) {
+  return (x - i) * (x - i) + (y - j) * (y - j) <= r * r;
+}
+
+bool check(ll i, ll j, ll x1, ll y1, ll x2, ll y2) {
+  return (x1 <= i && i <= x2) && (y1 <= j && j <= y2);
+}
+
 int main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int n;
+    cin >> n;
+    vector< Update > ups;
+    fn(i, n) {
+      string type;
+      cin >> type;
+      if(type == "Circle") {
+        ll type_ = 0;
+        ll x, y, r;
+        cin >> x >> y >> r;
+        char c;
+        cin >> c;
+        ups.push_back(Update(type_, x, y, r, -1, c));
+      } else if(type == "Rectangle") {
+        ll type_ = 1;
+        ll x1, y1, x2, y2;
+        cin >> x1 >> y1 >> x2 >> y2;
+        char c;
+        cin >> c;
+        ups.push_back(Update(type_, x1, y1, x2, y2, c));
+      } else {
+        ll x1, y1, x2, y2;
+        cin >> x1 >> y1 >> x2 >> y2;
+        frle(j, y1, y2) {
+          flre(i, x1, x2) {
+            bool printed = false;
+            frle(k, 0, ups.size() - 1) {
+              if(ups[k].type == 0) {
+                if(check(i, j, ups[k].x1, ups[k].y1, ups[k].x2)) {
+                  cout << ups[k].col;
+                  printed = true;
+                  break;
+                }
+              } else if(ups[k].type == 1) {
+                if(check(i, j, ups[k].x1, ups[k].y1, ups[k].x2, ups[k].y2)) {
+                  cout << ups[k].col;
+                  printed = true;
+                  break;
+                }
+              }
+            }
+            if(!printed) cout << ".";
+          }
+          cout << "\n";
+        }
       }
-      ans += ((ld) 1 - prob);
     }
-    cout << ans << "\n";
   }
   return 0;
 }

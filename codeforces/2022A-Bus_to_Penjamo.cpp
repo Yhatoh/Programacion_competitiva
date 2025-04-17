@@ -5,7 +5,7 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -13,6 +13,18 @@ using namespace std;
 #define frle(i,l,r) for(int i = r; i >= l; i--)
 #define feach(x, ds) for(auto &x : ds)
 #define sortv(vec) sort(vec.begin(), vec.end())
+
+template< typename T >
+ostream& operator<<(ostream& os, const vector< T > &vec) {
+  os << "[";
+  for(uint64_t i = 0; i < vec.size(); i++) {
+    os << vec[i];
+    if(i != vec.size() - 1)
+      os << ", ";
+  }
+  os << "]";
+  return os;
+}
 
 typedef vector< int > vi; typedef vector< vi > vvi;
 typedef pair< int, int > pii; typedef vector< pii > vpii;
@@ -29,22 +41,34 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    int n, r;
+    cin >> n >> r;
+    vi fam(n);
+    fn(i, n) cin >> fam[i];
+
+    int ans = 0;
+    fn(i, n) {
+      r -= fam[i] / 2;
+      ans += (fam[i] / 2) * 2;
+      fam[i] %= 2;
     }
-    cout << ans << "\n";
+
+    int unhappy = 0;
+    fn(i, n) {
+      unhappy += fam[i];
+    }
+
+    while(r < unhappy) {
+      r -= 1;
+      unhappy -= 2;
+    }
+
+    cout << ans + unhappy << "\n";
   }
   return 0;
 }

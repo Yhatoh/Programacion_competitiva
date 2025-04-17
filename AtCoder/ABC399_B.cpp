@@ -5,7 +5,7 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -29,22 +29,37 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    int n;
+    cin >> n;
+    vpii p(n);
+    fn(i, n) {
+      p[i].second = i;
+      cin >> p[i].first;
     }
-    cout << ans << "\n";
+
+    vi rank(n, 0);
+    int r = 1;
+    sortv(p);
+    reverse(p.begin(), p.end());
+
+    rank[p[0].second] = r;
+    int same = 1;
+    flr(i, 1, n) {
+      if(p[i].first != p[i - 1].first) {
+        r += same;
+        same = 0;
+      }
+      same += 1;
+      rank[p[i].second] = r;
+    }
+
+    fn(i, n) {
+      cout << rank[i] << "\n";
+    }
   }
   return 0;
 }

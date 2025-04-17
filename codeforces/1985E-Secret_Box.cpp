@@ -29,20 +29,38 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    ll x, y, z, k;
+    cin >> x >> y >> z >> k;
+
+    vvll coords;
+    flre(i, 1, x) {
+      if(k % i == 0) {
+        flre(j, 1, y) {
+          if(k % (i * j) == 0) {
+            if(k / (i * j) <= z) coords.push_back({i, j, k / (i * j)});
+          }
+        }
       }
-      ans += ((ld) 1 - prob);
+    }
+
+    ll ans = 0;
+    feach(coord, coords) {
+      ll now = 0;
+      ll nx, ny, nz;
+      nx = coord[0];
+      ny = coord[1];
+      nz = coord[2];
+      flre(i, 0, x - nx) {
+        flre(j, 0, y - ny) {
+          now += (ll) (z - nz) + 1;
+        }
+      }
+      ans = max(now, ans);
     }
     cout << ans << "\n";
   }

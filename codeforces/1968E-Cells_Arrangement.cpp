@@ -29,22 +29,26 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int n;
+    cin >> n;
+    if(n == 2) cout << "1 1\n1 2\n";
+    else if(n == 3) cout << "1 1\n1 2\n3 2\n";
+    else if(n == 4) cout << "1 1\n1 2\n3 3\n4 4\n";
+    else {
+      cout << "1 1\n1 2\n3 3\n4 4\n";
+      int x = 5; int y = 5;
+      n -= 4;
+      while(n--) {
+        cout << x << " " << y << "\n";
+        x++; y++;
       }
-      ans += ((ld) 1 - prob);
     }
-    cout << ans << "\n";
+    cout << "\n";
   }
   return 0;
 }

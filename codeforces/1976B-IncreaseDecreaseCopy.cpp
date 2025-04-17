@@ -24,27 +24,51 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
-int main() {
+#define int long long
+signed main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    int n;
+    cin >> n;
+    vi a(n), b(n + 1);
+    fn(i, n) cin >> a[i];
+    fn(i, n + 1) cin >> b[i];
+
+    bool flag = false;
+    fn(i, n) if(a[i] == b[n]) flag = true;
+    fn(i, n) if(b[i] == b[n]) flag = true;
+
+    int ans = 0;
+    fn(i, n) {
+      ans += abs(a[i] - b[i]);
     }
-    cout << ans << "\n";
+
+    int min_ans = 1000000000000000000;
+    if(!flag) {
+      fn(i, n) {
+        int curr = ans;
+        if(a[i] >= b[n] && b[n] >= b[i]) curr += 1;
+        else if(a[i] <= b[n] && b[n] <= b[i]) curr += 1;
+        else if(a[i] <= b[i] && b[i] <= b[n]) curr += abs(b[i] - b[n]) + 1;
+        else if(a[i] >= b[i] && b[i] >= b[n]) curr += abs(b[i] - b[n]) + 1;
+        else {
+         int type2 = curr + 1 + abs(a[i] - b[n]);
+         curr = min(type2, type2);
+        }
+        min_ans = min(min_ans, curr);
+      }
+    } else {
+      min_ans = ans + 1;
+    }
+
+    cout << min_ans << "\n";
   }
   return 0;
 }

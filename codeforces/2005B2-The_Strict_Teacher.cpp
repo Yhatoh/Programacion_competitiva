@@ -5,7 +5,7 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -14,6 +14,17 @@ using namespace std;
 #define feach(x, ds) for(auto &x : ds)
 #define sortv(vec) sort(vec.begin(), vec.end())
 
+template< typename T >
+ostream& operator<<(ostream& os, const vector< T > &vec) {
+  os << "[";
+  for(uint64_t i = 0; i < vec.size(); i++) {
+    os << vec[i];
+    if(i != vec.size() - 1)
+      os << ", ";
+  }
+  os << "]";
+  return os;
+}
 typedef vector< int > vi; typedef vector< vi > vvi;
 typedef pair< int, int > pii; typedef vector< pii > vpii;
 typedef vector< vpii > vvpii;
@@ -29,22 +40,47 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int n, m, q;
+    cin >> n >> m >> q;
+    vi teachers(m);
+    fn(i, m) cin >> teachers[i];
+    vi queries(q);
+    fn(i, q) cin >> queries[i];
+
+    sort(teachers.begin(), teachers.end());
+    fn(i, q) {
+      int s = queries[i];
+      auto t1 = lower_bound(teachers.begin(), teachers.end(), s);
+      vector< int >::iterator t2;
+      if(t1 == teachers.end()) {
+        t1 = prev(t1);
+        t2 = t1;
+      } else if(t1 == teachers.begin()) {
+        t2 = t1;
+      } else {
+        t2 = prev(t1);
       }
-      ans += ((ld) 1 - prob);
+
+      if(s < *t1 && s < *t2) {
+        cout << (s - 1) + min(*t1,*t2) - (s - 1) - 1 << "\n";
+      } else if(s > *t1 && s > *t2) {
+        cout << (n - s) + n - (max(*t1, *t2) + (n - s)) << "\n";
+      } else {
+        int aux = min(*t1, *t2);
+        int aux2 = max(*t1, *t2);
+        int x1 = aux;
+        int x2 = aux2;
+        int mid_point = (x2 + x1) / 2;
+
+        cout << abs(mid_point - s) + min(mid_point - (x1 + abs(mid_point - s)), (x2 - abs(mid_point - s)) - mid_point) << "\n"; 
+      }
+
     }
-    cout << ans << "\n";
   }
   return 0;
 }

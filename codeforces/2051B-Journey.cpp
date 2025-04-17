@@ -5,7 +5,7 @@ Deseo ante todo expresar a mis conciudadanos que los últimos treinta años de m
 #include <bits/stdc++.h>
 using namespace std;
 
-#define DBG(var) cout << #var << " = " << var << "\n";
+#define dbg(var) cout << #var << " = " << var << "\n";
 #define fn(i,n) for(int i = 0; i < n; i++)
 #define flr(i,l,r) for(int i = l; i < r; i++)
 #define flre(i,l,r) for(int i = l; i <= r; i++)
@@ -24,27 +24,38 @@ typedef long double ld; typedef vector< ld > vld;
 typedef vector< vld > vvld; typedef pair< ld, ld > pldld;
 typedef vector< pldld > vpldld; typedef vector< vpldld >  vvpldld;
 
+bool cond(ll n, ll a, ll b, ll c, ll days) {
+  ll compla = days / 3;
+  ll amount = compla * (a + b + c);
+  
+  ll rest = days % 3;
+  if(rest >= 1) amount += a;
+  if(rest >= 2) amount += b;
+
+  return n <= amount;
+}
+
 int main() {
 #ifndef debug
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
-      }
-      ans += ((ld) 1 - prob);
+    ll n, a, b, c;
+
+    cin >> n >> a >> b >> c;
+    ll l = 1;
+    ll r = 10000000000;
+    while(l < r) {
+      ll mid = (l + r) / 2;
+      if(cond(n, a, b, c, mid)) r = mid;
+      else l = mid + 1;
     }
-    cout << ans << "\n";
+    cout << l << "\n";
   }
   return 0;
 }

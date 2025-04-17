@@ -29,22 +29,47 @@ int main() {
   ios_base::sync_with_stdio(false); 
   cin.tie(NULL);
   cout.setf(ios::fixed);
-  cout.precision(6);
+  cout.precision(4);
 #endif
   int t = 1;
+  cin >> t;
   while(t--) {
-    int n, k;
-    cin >> n >> k;
-    ld ans = 0;
-    flr(i, 1, k + 1) {
-      ld x = (((ld) i - 1) / (ld) k);
-      ld prob = x;
-      flr(j, 1, n) {
-        prob *= x;
+    int n, m;
+    cin >> n >> m;
+    vector< string > grid(n);
+    fn(i, n) cin >> grid[i];
+
+    int first_i = -1;
+    int first_j = -1;
+    fn(i, n) {
+      fn(j, m) {
+        if(grid[i][j] == '#') {
+          first_i = i;
+          first_j = j;
+          break;
+        }
       }
-      ans += ((ld) 1 - prob);
+      if(first_i != -1) break;
     }
-    cout << ans << "\n";
+
+    int last_i = -1;
+    int last_j = -1;
+    frle(i, 0, n - 1) {
+      fn(j, m) {
+        if(grid[i][j] == '#') {
+          last_i = i;
+          last_j = j;
+          break;
+        }
+      }
+      if(last_i != -1) break;
+    }
+
+    if(last_i == first_i && last_j == first_j) cout << first_i + 1 << " " << first_j + 1 << "\n";
+    else {
+      int diff = (last_i - first_i + 1) / 2;
+      cout << first_i + diff + 1 << " " << last_j + 1 << "\n";
+    }
   }
   return 0;
 }
